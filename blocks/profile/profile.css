@@ -9,7 +9,7 @@
   .profile {
     flex-direction: row;
     gap: 30px;
-    margin: 0 19px;
+    margin: 0 19px 51px;
   }
 }
 
@@ -17,6 +17,6 @@
   .profile {
     min-height: 120px;
     max-width: 880px;
-    margin: 0 auto;
+    margin: 0 auto 51px;
   }
 }
