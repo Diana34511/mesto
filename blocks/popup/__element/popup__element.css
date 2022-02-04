@@ -1,0 +1,7 @@
+.popup__element {
+  padding: 0;
+}
+
+.popup__element:first-child {
+  margin-bottom: 30px;
+}
