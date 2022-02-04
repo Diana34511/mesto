@@ -4,6 +4,13 @@
   position: absolute;
   right: -29px;
   top: 10px;
+  background-image: url(../../../images/EditButton.svg);
+  border: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  padding: 0;
+  background-size: contain;
 }
 
 @media screen and (min-width: 768px) {
