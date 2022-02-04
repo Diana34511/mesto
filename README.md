@@ -16,4 +16,4 @@ Mesto - это интерактивная страница, куда можно 
 
 **GitHub**
 
-- [Ссылка на GitHub](https://diana34511.github.io/russian-travel/)
+- [Ссылка на GitHub](https://diana34511.github.io/mesto/)
