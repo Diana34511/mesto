@@ -13,6 +13,12 @@
   }
 }
 
+@media screen and (min-width: 880px) {
+  .profile {
+    margin: 0 0 51px;
+  }
+}
+
 @media screen and (min-width: 1280px) {
   .profile {
     min-height: 120px;
