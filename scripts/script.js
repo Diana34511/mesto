@@ -1,9 +1,36 @@
+const initialCards = [
+    {
+      name: 'Архыз',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
+
+    },
+    {
+      name: 'Челябинская область',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+    },
+    {
+      name: 'Иваново',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+    },
+    {
+      name: 'Камчатка',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+    },
+    {
+      name: 'Холмогорский район',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+    },
+    {
+      name: 'Байкал',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+    }
+  ];
+
 const editButton = document.querySelector('.profile__edit-button');
 editButton.addEventListener('click', openPopup);
 function openPopup() {
     const popup = document.querySelector('.popup');
     popup.classList.add('popup_opened');
-    // console.log(popup);
 
     const profileTitle = document.querySelector('.profile__title');
     const profileSubitle = document.querySelector('.profile__subtitle');
@@ -23,12 +50,13 @@ function closePopupOnBackground(event) {
 }
 
 function closePopup(){
-    popup.classList.remove('popup_opened');
+    const popupToClose = document.querySelector('.popup_opened');
+    popupToClose.classList.remove('popup_opened');
 }
 
-const popup = document.querySelector('.popup');
+const popup = document.querySelector('.popup[data-popup-name="renameTitle"]');
 popup.addEventListener('click', closePopupOnBackground);
-const popupCloseButton = document.querySelector('.popup__close-button');
+const popupCloseButton = popup.querySelector('.popup__close-button');
 popupCloseButton.addEventListener('click', closePopup);
 
 // Находим форму в DOM
@@ -71,3 +99,32 @@ function handlFormSubmit (evt) {
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
 formElement.addEventListener('submit', handlFormSubmit);
+
+const userCards = document.querySelector('#cards').content;
+const containerCards = document.querySelector('.cards');
+
+//Добавление карточек
+
+function appendCardData(card) {
+    const cardItem = userCards.querySelector('.cards__item').cloneNode(true);
+    cardItem.querySelector('.cards__image').src = card.link;
+    cardItem.querySelector('.cards__title').textContent = card.name;
+    console.log(card);
+    containerCards.append(cardItem);
+}
+
+initialCards.forEach(appendCardData);
+
+//кнопка добавления карточки
+const popupForAddNewCard = document.querySelector('.popup[data-popup-name="newCard"]');
+const addNewCardButton = document.querySelector('.profile__add-button');
+addNewCardButton.addEventListener('click', openPopupForAddNewCard);
+
+function openPopupForAddNewCard() {
+    const popup = document.querySelector('.popup[data-popup-name="newCard"]');
+    popup.classList.add('popup_opened');
+
+}
+
+popupForAddNewCard.querySelector('.popup__close-button').addEventListener('click', closePopup);
+popupForAddNewCard.addEventListener('click', closePopupOnBackground);

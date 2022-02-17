@@ -22,7 +22,16 @@
         <button class="profile__add-button hover-animation"></button>
       </section>
       <section class="cards">
-        <article class="cards__item">
+        <template id="cards">
+          <article class="cards__item">
+            <img class="cards__image" alt="" src="" />
+            <div class="cards__info">
+              <h2 class="cards__title"></h2>
+              <button class="cards__like hover-animation"></button>
+            </div>
+          </article>
+        </template>
+        <!-- <article class="cards__item">
           <img
             class="cards__image"
             alt="Карачевск"
@@ -79,13 +88,13 @@
             <h2 class="cards__title">Карачаевск</h2>
             <button class="cards__like hover-animation"></button>
           </div>
-        </article>
+        </article> -->
       </section>
     </main>
     <footer class="footer">
       <p class="footer__author">&#169; 2020 Mesto Russia</p>
     </footer>
-    <div class="popup">
+    <div class="popup" data-popup-name="renameTitle">
       <div class="popup__content">
         <button class="popup__close-button"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
@@ -94,7 +103,7 @@
             <li class="popup__element">
               <input
                 name="nameInput"
-                value=" "
+                value=""
                 type="text"
                 class="popup__textarea"
                 placeholder="Введите имя"
@@ -103,13 +112,43 @@
             <li class="popup__element">
               <input
                 name="jobInput"
-                value=" "
+                value=""
                 class="popup__textarea"
                 placeholder="Введите описание"
               />
             </li>
             <li class="popup__element">
               <button class="popup__button hover-animation">Сохранить</button>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+    <div class="popup" data-popup-name="newCard">
+      <div class="popup__content">
+        <button class="popup__close-button"></button>
+        <h2 class="popup__title">Новое место</h2>
+        <form name="Profile">
+          <ul class="popup__elements">
+            <li class="popup__element">
+              <input
+                name="nameInput"
+                value=""
+                type="text"
+                class="popup__textarea"
+                placeholder="Название"
+              />
+            </li>
+            <li class="popup__element">
+              <input
+                name="jobInput"
+                value=""
+                class="popup__textarea"
+                placeholder="Введите ссылку"
+              />
+            </li>
+            <li class="popup__element">
+              <button class="popup__button hover-animation">Создать</button>
             </li>
           </ul>
         </form>
