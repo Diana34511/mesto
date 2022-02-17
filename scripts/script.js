@@ -65,22 +65,28 @@ const formElement = document.querySelector('.popup__content');
 const nameInput = document.querySelector('input[name="nameInput"]');
 const jobInput = document.querySelector('input[name="jobInput"]');
 
-function validateInputs() {
-    if(nameInput.value && jobInput.value) {
-        popupSubmitButton.removeAttribute('disabled');
+const popupSubmitButton = document.querySelector('.popup__button');
+
+function validateInputs(a, b, c) {
+    if(a.value && b.value) {
+        c.removeAttribute('disabled');
     } else {
-        popupSubmitButton.setAttribute('disabled', true);
+        c.setAttribute('disabled', true);
     }
 }
 
-nameInput.addEventListener('input', validateInputs);
-jobInput.addEventListener('input', validateInputs);
+nameInput.addEventListener('input', () => {
+    validateInputs(nameInput, jobInput, popupSubmitButton)
+});
+jobInput.addEventListener('input', () => {
+    validateInputs(nameInput, jobInput, popupSubmitButton)
+});
 
-const popupSubmitButton = document.querySelector('.popup__button');
+
 
 // Обработчик «отправки» формы, хотя пока
 // она никуда отправляться не будет
-function handlFormSubmit (evt) {
+function handlFormSubmit(evt) {
     evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
                                                 // Так мы можем определить свою логику отправки.
                                                 // О том, как это делать, расскажем позже.
@@ -105,20 +111,28 @@ const containerCards = document.querySelector('.cards');
 
 //Добавление карточек
 
-function appendCardData(card) {
+function appendCardData(card, flag = false) {
     const cardItem = userCards.querySelector('.cards__item').cloneNode(true);
     cardItem.querySelector('.cards__image').src = card.link;
     cardItem.querySelector('.cards__title').textContent = card.name;
-    console.log(card);
-    containerCards.append(cardItem);
+    if (flag) {
+        containerCards.prepend(cardItem);
+    } else {
+        containerCards.append(cardItem);
+    }
+    
 }
 
-initialCards.forEach(appendCardData);
+initialCards.forEach((card) => {
+    appendCardData(card);
+});
 
-//кнопка добавления карточки
+//кнопка добавления карточки, открытие и закрытие
 const popupForAddNewCard = document.querySelector('.popup[data-popup-name="newCard"]');
 const addNewCardButton = document.querySelector('.profile__add-button');
 addNewCardButton.addEventListener('click', openPopupForAddNewCard);
+popupForAddNewCard.querySelector('.popup__close-button').addEventListener('click', closePopup);
+popupForAddNewCard.addEventListener('click', closePopupOnBackground);
 
 function openPopupForAddNewCard() {
     const popup = document.querySelector('.popup[data-popup-name="newCard"]');
@@ -126,5 +140,32 @@ function openPopupForAddNewCard() {
 
 }
 
-popupForAddNewCard.querySelector('.popup__close-button').addEventListener('click', closePopup);
-popupForAddNewCard.addEventListener('click', closePopupOnBackground);
+//лайки
+const likes = containerCards.querySelectorAll('.cards__like');
+
+ likes.forEach(like => {
+    like.addEventListener('click', () => like.classList.toggle('cards__like_active'));
+  });
+
+//добавление новых карточек
+
+function saveNewCard(event) {
+    event.preventDefault();
+    const newPlaceName = popupForAddNewCard.querySelector('input[name="placeName"]');
+    const newPlaceLink = popupForAddNewCard.querySelector('input[name="placeLink"]');
+    const submitButton = popupForAddNewCard.querySelector('.popup__button');
+    const newCard = {
+        name: newPlaceName.value,
+        link: newPlaceLink.value
+    }
+    newPlaceName.addEventListener('input', () => {
+        validateInputs(newPlaceName, newPlaceLink, submitButton) 
+    });
+    newPlaceLink.addEventListener('input', () => {
+        validateInputs(newPlaceName, newPlaceLink, submitButton) 
+    })
+    appendCardData(newCard, true);
+    closePopup();
+}
+
+popupForAddNewCard.querySelector('.popup__content').addEventListener('submit', saveNewCard);
