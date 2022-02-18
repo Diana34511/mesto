@@ -123,17 +123,24 @@ function appendCardData(card, flag = false) {
     const likesNew = cardItem.querySelector('.cards__like');
     console.log(likesNew);
     likesNew.addEventListener('click', () => likesNew.classList.toggle('cards__like_active'));
+    const cardImage = cardItem.querySelector('.cards__image');
+    cardImage.addEventListener('click', openImagePopup) //обработчик клика для открытия полного размера картинки
+
+    function openImagePopup() {
+
+        const imagePopupContainer = document.querySelector('.image-popup');
+        imagePopupContainer.classList.add('popup_opened');
+        imagePopupContainer.querySelector('.image-popup__image').src = card.link;
+        imagePopupContainer.querySelector('.image-popup__title').textContent = card.name;
+        
+    }
 
     const removeCardButton = cardItem.querySelector('.cards__trash-button');
     console.log(removeCardButton);
     removeCardButton.addEventListener('click', function() {
         removeCardButton.closest('.cards__item').remove();
     });
-    // const likes = containerCards.querySelectorAll('.cards__like');
-
-//  likes.forEach(like => {
-//     like.addEventListener('click', () => like.classList.toggle('cards__like_active'));
-//   });
+   
 }
 
 initialCards.forEach((card) => {
@@ -183,3 +190,13 @@ function saveNewCard(event) {
 
 
 popupForAddNewCard.querySelector('.popup__content').addEventListener('submit', saveNewCard);
+
+//открытие и закрытие попапа + его замена 
+
+
+
+
+
+const imagePopupContainer = document.querySelector('.image-popup');
+imagePopupContainer.addEventListener('click', closePopupOnBackground);
+imagePopupContainer.querySelector('.image-popup__close-button').addEventListener('click', closePopup);

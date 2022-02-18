@@ -4,6 +4,6 @@
   background-color: rgba(0, 0, 0, 0.9);
   position: fixed;
   top: 0px;
-  /* display: none; */
+  display: none;
   max-width: 880px;
 }
