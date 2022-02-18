@@ -120,7 +120,20 @@ function appendCardData(card, flag = false) {
     } else {
         containerCards.append(cardItem);
     }
-    
+    const likesNew = cardItem.querySelector('.cards__like');
+    console.log(likesNew);
+    likesNew.addEventListener('click', () => likesNew.classList.toggle('cards__like_active'));
+
+    const removeCardButton = cardItem.querySelector('.cards__trash-button');
+    console.log(removeCardButton);
+    removeCardButton.addEventListener('click', function() {
+        removeCardButton.closest('.cards__item').remove();
+    });
+    // const likes = containerCards.querySelectorAll('.cards__like');
+
+//  likes.forEach(like => {
+//     like.addEventListener('click', () => like.classList.toggle('cards__like_active'));
+//   });
 }
 
 initialCards.forEach((card) => {
@@ -134,38 +147,39 @@ addNewCardButton.addEventListener('click', openPopupForAddNewCard);
 popupForAddNewCard.querySelector('.popup__close-button').addEventListener('click', closePopup);
 popupForAddNewCard.addEventListener('click', closePopupOnBackground);
 
+
+const newPlaceName = popupForAddNewCard.querySelector('input[name="placeName"]');
+const newPlaceLink = popupForAddNewCard.querySelector('input[name="placeLink"]');
+const submitButton = popupForAddNewCard.querySelector('.popup__button');
+
+newPlaceName.addEventListener('input', () => {
+        validateInputs(newPlaceName, newPlaceLink, submitButton) 
+ });
+newPlaceLink.addEventListener('input', () => {
+        validateInputs(newPlaceName, newPlaceLink, submitButton) 
+ });
+
 function openPopupForAddNewCard() {
     const popup = document.querySelector('.popup[data-popup-name="newCard"]');
     popup.classList.add('popup_opened');
+    validateInputs(newPlaceName, newPlaceLink, submitButton);
 
 }
-
-//лайки
-const likes = containerCards.querySelectorAll('.cards__like');
-
- likes.forEach(like => {
-    like.addEventListener('click', () => like.classList.toggle('cards__like_active'));
-  });
 
 //добавление новых карточек
 
 function saveNewCard(event) {
     event.preventDefault();
-    const newPlaceName = popupForAddNewCard.querySelector('input[name="placeName"]');
-    const newPlaceLink = popupForAddNewCard.querySelector('input[name="placeLink"]');
-    const submitButton = popupForAddNewCard.querySelector('.popup__button');
+    
     const newCard = {
         name: newPlaceName.value,
         link: newPlaceLink.value
-    }
-    newPlaceName.addEventListener('input', () => {
-        validateInputs(newPlaceName, newPlaceLink, submitButton) 
-    });
-    newPlaceLink.addEventListener('input', () => {
-        validateInputs(newPlaceName, newPlaceLink, submitButton) 
-    })
+    };
     appendCardData(newCard, true);
+    newPlaceName.value = "";
+    newPlaceLink.value = "";
     closePopup();
 }
+
 
 popupForAddNewCard.querySelector('.popup__content').addEventListener('submit', saveNewCard);
