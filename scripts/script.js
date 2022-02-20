@@ -128,6 +128,7 @@ function createNewCard(newCardData) {
     const removeCardButton = cardElement.querySelector('.cards__trash-button');
 
     cardImage.src = newCardData.link;
+    cardImage.alt = newCardData.name;
 
     cardTitle.textContent = newCardData.name;
 
@@ -137,6 +138,7 @@ function createNewCard(newCardData) {
         openPopup(imagePopup);
 
         imagePopupBackground.src = newCardData.link;
+        imagePopupBackground.alt = newCardData.name;
         imagePopupTitle.textContent = newCardData.name;
     });
 
