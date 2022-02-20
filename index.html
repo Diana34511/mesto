@@ -19,7 +19,7 @@
           <button class="profile__edit-button hover-animation"></button>
         </div>
 
-        <button class="profile__add-button hover-animation"></button>
+        <button class="profile__add-card-button hover-animation"></button>
       </section>
       <section class="cards">
         <template id="cards">
@@ -32,70 +32,12 @@
             </div>
           </article>
         </template>
-        <!-- <article class="cards__item">
-          <img
-            class="cards__image"
-            alt="Карачевск"
-            src="./images/karachevsk.png"
-          />
-          <div class="cards__info">
-            <h2 class="cards__title">Карачаевск</h2>
-            <button class="cards__like hover-animation"></button>
-          </div>
-        </article>
-        <article class="cards__item">
-          <img
-            class="cards__image"
-            alt="Гора Эльбрус"
-            src="./images/elbrus.png"
-          />
-          <div class="cards__info">
-            <h2 class="cards__title">Гора Эльбрус</h2>
-            <button class="cards__like hover-animation"></button>
-          </div>
-        </article>
-        <article class="cards__item">
-          <img class="cards__image" alt="Домбай" src="./images/dombai.svg" />
-          <div class="cards__info">
-            <h2 class="cards__title">Домбай</h2>
-            <button class="cards__like hover-animation"></button>
-          </div>
-        </article>
-        <article class="cards__item">
-          <img
-            class="cards__image"
-            alt="Гора Эльбрус"
-            src="./images/elbrus.png"
-          />
-          <div class="cards__info">
-            <h2 class="cards__title">Гора Эльбрус</h2>
-            <button class="cards__like hover-animation"></button>
-          </div>
-        </article>
-        <article class="cards__item">
-          <img class="cards__image" alt="Домбай" src="./images/dombai.svg" />
-          <div class="cards__info">
-            <h2 class="cards__title">Домбай</h2>
-            <button class="cards__like hover-animation"></button>
-          </div>
-        </article>
-        <article class="cards__item">
-          <img
-            class="cards__image"
-            alt="Карачаевск"
-            src="./images/karachevsk.png"
-          />
-          <div class="cards__info">
-            <h2 class="cards__title">Карачаевск</h2>
-            <button class="cards__like hover-animation"></button>
-          </div>
-        </article> -->
       </section>
     </main>
     <footer class="footer">
       <p class="footer__author">&#169; 2020 Mesto Russia</p>
     </footer>
-    <div class="popup" data-popup-name="renameTitle">
+    <div class="popup profile-popup">
       <div class="popup__content">
         <button class="popup__close-button"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
@@ -125,7 +67,7 @@
         </form>
       </div>
     </div>
-    <div class="popup" data-popup-name="newCard">
+    <div class="popup new-card-popup">
       <div class="popup__content">
         <button class="popup__close-button"></button>
         <h2 class="popup__title">Новое место</h2>
@@ -156,9 +98,9 @@
       </div>
     </div>
 
-    <div class="image-popup">
+    <div class="popup image-popup">
       <div class="image-popup__content">
-        <button class="image-popup__close-button"></button>
+        <button class="popup__close-button image-popup__close-button"></button>
         <img class="image-popup__image" alt="" src="/" />
         <h2 class="image-popup__title"></h2>
       </div>
