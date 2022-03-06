@@ -59,25 +59,35 @@ function closePopup(popupToClose){
     popupToClose.classList.remove('popup_opened');
 }
 
-function closePopupOnBackground(event) {
-    if (event.target !== event.currentTarget) {
-       return null;
-    }  
-
-    closePopup(event.target);
+const hideInputErrorsOnClosePopup = (formElement) => {
+    const inputs = formElement.querySelectorAll('.popup__textarea');
+    inputs.forEach(inputElement => {
+        hideInputError(formElement, inputElement, validationClassNames);
+        inputElement.value = "";
+    });
 }
 
-function validateInputs(firstInput, secondInput, submitBtn) {
-    if(firstInput.value && secondInput.value) {
-        submitBtn.removeAttribute('disabled');
-    } else {
-        submitBtn.setAttribute('disabled', true);
-    }
+function disabledButton(formElement) {
+    const buttonElement = formElement.querySelector('.popup__button');
+    buttonElement.classList.add('popup__button_inactive');
+    buttonElement.setAttribute('disabled', true);
 }
 
 // Общие листенеры для закрытия попапов на нажатие бэкграунда 
 [imagePopup, profilePopup, newCardPopup].forEach(popup => {
-    popup.addEventListener('click', closePopupOnBackground);
+    popup.addEventListener('click', (event) => {
+        if (event.target === event.currentTarget) {
+            const formElement = event.target;
+
+            closePopup(formElement);
+        
+            const inputs = formElement.querySelectorAll('.popup__textarea');
+        
+            hideInputErrorsOnClosePopup(formElement);
+
+            disabledButton(formElement);
+         }  
+    });
 });
 
 // Общие листенеры закрытия диалоговых окон
@@ -85,7 +95,9 @@ const popCloseButtons = document.querySelectorAll('.popup__close-button');
 
 popCloseButtons.forEach(closeBtn => {
     closeBtn.addEventListener('click', (event) => {
-        closePopup(event.target.closest('.popup'));
+        const popUpToClose = event.target.closest('.popup');
+        closePopup(popUpToClose);
+        hideInputErrorsOnClosePopup(popUpToClose);
     });
 });
 
@@ -95,7 +107,6 @@ function handlFormSubmit(evt) {
 
     profileTitle.textContent = profileNameInput.value;
     profileSubitle.textContent = profileJobInput.value;
-
     closePopup(profilePopup);
 }
 
@@ -106,11 +117,6 @@ editProfileButton.addEventListener('click', () => {
     profileJobInput.value = profileSubitle.textContent;
 });
 
-[profileNameInput, profileJobInput].forEach(input => {
-    input.addEventListener('input', () => {
-        validateInputs(profileNameInput, profileJobInput, profilePopupSubmitButton)
-    });
-})
 
 profilePopupContent.addEventListener('submit', handlFormSubmit);
 
@@ -163,20 +169,16 @@ function saveNewCard(event) {
     newPlaceLink.value = "";
 
     closePopup(newCardPopup);
+    disabledButton(newCardPopup);
 }
 
 addNewCardButton.addEventListener('click', () => {
     openPopup(newCardPopup);
-
-    validateInputs(newPlaceName, newPlaceLink, submitButton);
 });
 
-[newPlaceName, newPlaceLink].forEach(input => {
-    input.addEventListener('input', () => {
-        validateInputs(newPlaceName, newPlaceLink, submitButton) 
-    });
-});
 
 newCardPopupContent.addEventListener('submit', saveNewCard);
 
 containerCards.append(...initialCards.map(card => createNewCard(card)));
+
+
