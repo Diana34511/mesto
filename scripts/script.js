@@ -69,8 +69,10 @@ const hideInputErrorsOnClosePopup = (formElement) => {
 
 const disabledButton = (formElement) => {
     const buttonElement = formElement.querySelector('.popup__button');
-    buttonElement.classList.add('popup__button_inactive');
-    buttonElement.setAttribute('disabled', true);
+    if (buttonElement) {
+        buttonElement.classList.add('popup__button_inactive');
+        buttonElement.setAttribute('disabled', true);
+    }
 }
 
 const closeAndCleanPopup = (formElement) => {
@@ -79,15 +81,16 @@ const closeAndCleanPopup = (formElement) => {
     hideInputErrorsOnClosePopup(formElement);
 
     disabledButton(formElement);
+
+    document.removeEventListener('keydown', closePopupOnPushEsc);
 }
 
 const closePopupOnPushEsc = (evt) => {
     if (evt.key === 'Escape') {
         const openedPopup = document.querySelector('.popup_opened');
         closeAndCleanPopup(openedPopup);
-        
+        document.removeEventListener('keydown', closePopupOnPushEsc);
     }
-    document.removeEventListener('keydown', closePopupOnPushEsc);
 }
 
 // Общие листенеры для закрытия попапов на нажатие бэкграунда 
@@ -108,8 +111,7 @@ const popCloseButtons = document.querySelectorAll('.popup__close-button');
 popCloseButtons.forEach(closeBtn => {
     closeBtn.addEventListener('click', (event) => {
         const popUpToClose = event.target.closest('.popup');
-        closePopup(popUpToClose);
-        hideInputErrorsOnClosePopup(popUpToClose);
+        closeAndCleanPopup(popUpToClose);
     });
 });
 
@@ -120,12 +122,13 @@ function handlFormSubmit(evt) {
     profileTitle.textContent = profileNameInput.value;
     profileSubitle.textContent = profileJobInput.value;
     closePopup(profilePopup);
+    document.removeEventListener('keydown', closePopupOnPushEsc);
 }
 
 editProfileButton.addEventListener('click', () => {
-    openPopup(profilePopup);
+    disabledButton(profilePopup);
 
-    document.addEventListener('keydown', closePopupOnPushEsc);
+    openPopup(profilePopup);
 
     profileNameInput.value = profileTitle.textContent;
     profileJobInput.value = profileSubitle.textContent;
@@ -186,6 +189,7 @@ function saveNewCard(event) {
 
     closePopup(newCardPopup);
     disabledButton(newCardPopup);
+    document.removeEventListener('keydown', closePopupOnPushEsc);
 }
 
 addNewCardButton.addEventListener('click', () => {
@@ -197,8 +201,4 @@ newCardPopupContent.addEventListener('submit', saveNewCard);
 
 containerCards.append(...initialCards.map(card => createNewCard(card)));
 
-
-
-
-// document.addEventListener('keydown', closePopupOnPushEsc);
 

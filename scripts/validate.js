@@ -35,7 +35,7 @@ const checkInputValidity = (formElement, inputElement, validationProps) => {
     const buttonElement = formElement.querySelector(validationProps.submitButtonSelector);
     toggleButtonState(inputList, buttonElement, validationProps);
     inputList.forEach((inputElement) => {
-      const eventsList = ["change", "keyup", "paste", "input", "propertychange"];   
+      const eventsList = ["change", "paste", "input"];   
       eventsList.forEach(eventName => {
         inputElement.addEventListener(eventName, function () {
             checkInputValidity(formElement, inputElement, validationProps);
