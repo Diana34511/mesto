@@ -13,7 +13,6 @@ const showInputError = (formElement, inputElement, errorMessage, validationProps
     inputElement.classList.add(validationProps.inputErrorClass);
     errorElement.textContent = errorMessage;
     errorElement.classList.add(validationProps.inputErrorActiveClass);
-    console.log('hello');
   };
 
 const hideInputError = (formElement, inputElement, validationProps) => {

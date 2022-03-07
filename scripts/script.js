@@ -67,10 +67,27 @@ const hideInputErrorsOnClosePopup = (formElement) => {
     });
 }
 
-function disabledButton(formElement) {
+const disabledButton = (formElement) => {
     const buttonElement = formElement.querySelector('.popup__button');
     buttonElement.classList.add('popup__button_inactive');
     buttonElement.setAttribute('disabled', true);
+}
+
+const closeAndCleanPopup = (formElement) => {
+    closePopup(formElement);
+        
+    hideInputErrorsOnClosePopup(formElement);
+
+    disabledButton(formElement);
+}
+
+const closePopupOnPushEsc = (evt) => {
+    if (evt.key === 'Escape') {
+        const openedPopup = document.querySelector('.popup_opened');
+        closeAndCleanPopup(openedPopup);
+        
+    }
+    document.removeEventListener('keydown', closePopupOnPushEsc);
 }
 
 // Общие листенеры для закрытия попапов на нажатие бэкграунда 
@@ -79,16 +96,11 @@ function disabledButton(formElement) {
         if (event.target === event.currentTarget) {
             const formElement = event.target;
 
-            closePopup(formElement);
-        
-            const inputs = formElement.querySelectorAll('.popup__textarea');
-        
-            hideInputErrorsOnClosePopup(formElement);
-
-            disabledButton(formElement);
+            closeAndCleanPopup(formElement);
          }  
     });
 });
+
 
 // Общие листенеры закрытия диалоговых окон
 const popCloseButtons = document.querySelectorAll('.popup__close-button');
@@ -112,6 +124,8 @@ function handlFormSubmit(evt) {
 
 editProfileButton.addEventListener('click', () => {
     openPopup(profilePopup);
+
+    document.addEventListener('keydown', closePopupOnPushEsc);
 
     profileNameInput.value = profileTitle.textContent;
     profileJobInput.value = profileSubitle.textContent;
@@ -142,6 +156,8 @@ function createNewCard(newCardData) {
 
     cardImage.addEventListener('click', () => {
         openPopup(imagePopup);
+
+        document.addEventListener('keydown', closePopupOnPushEsc);
 
         imagePopupBackground.src = newCardData.link;
         imagePopupBackground.alt = newCardData.name;
@@ -174,11 +190,15 @@ function saveNewCard(event) {
 
 addNewCardButton.addEventListener('click', () => {
     openPopup(newCardPopup);
+    document.addEventListener('keydown', closePopupOnPushEsc);
 });
-
 
 newCardPopupContent.addEventListener('submit', saveNewCard);
 
 containerCards.append(...initialCards.map(card => createNewCard(card)));
 
+
+
+
+// document.addEventListener('keydown', closePopupOnPushEsc);
 
