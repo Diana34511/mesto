@@ -33,7 +33,6 @@ const newCardPopupContent = newCardPopup.querySelector('.popup__content');
 const addNewCardButton = document.querySelector('.profile__add-card-button');
 const newPlaceName = newCardPopup.querySelector('input[name="placeName"]');
 const newPlaceLink = newCardPopup.querySelector('input[name="placeLink"]');
-const submitButton = newCardPopup.querySelector('.popup__button');
 
 // Элементы диалогового окна открытия изображения
 const imagePopup = document.querySelector('.image-popup');
@@ -48,15 +47,16 @@ const profileSubitle = document.querySelector('.profile__subtitle');
 const editProfileButton = document.querySelector('.profile__edit-button');
 const profileNameInput = document.querySelector('input[name="nameInput"]');
 const profileJobInput = document.querySelector('input[name="jobInput"]');
-const profilePopupSubmitButton = document.querySelector('.popup__button');
 
 // Общие функции
 function openPopup(popup) {
     popup.classList.add('popup_opened');
+    document.addEventListener('keydown', closePopupOnPushEsc);
 }
 
 function closePopup(popupToClose){
     popupToClose.classList.remove('popup_opened');
+    document.removeEventListener('keydown', closePopupOnPushEsc);
 }
 
 const hideInputErrorsOnClosePopup = (formElement) => {
@@ -75,45 +75,22 @@ const disabledButton = (formElement) => {
     }
 }
 
-const closeAndCleanPopup = (formElement) => {
-    closePopup(formElement);
-        
-    hideInputErrorsOnClosePopup(formElement);
-
-    disabledButton(formElement);
-
-    document.removeEventListener('keydown', closePopupOnPushEsc);
-}
-
 const closePopupOnPushEsc = (evt) => {
     if (evt.key === 'Escape') {
         const openedPopup = document.querySelector('.popup_opened');
-        closeAndCleanPopup(openedPopup);
-        document.removeEventListener('keydown', closePopupOnPushEsc);
+        closePopup(openedPopup);
     }
 }
 
-// Общие листенеры для закрытия попапов на нажатие бэкграунда 
-[imagePopup, profilePopup, newCardPopup].forEach(popup => {
-    popup.addEventListener('click', (event) => {
-        if (event.target === event.currentTarget) {
-            const formElement = event.target;
+const popups = document.querySelectorAll('.popup')
 
-            closeAndCleanPopup(formElement);
-         }  
-    });
-});
-
-
-// Общие листенеры закрытия диалоговых окон
-const popCloseButtons = document.querySelectorAll('.popup__close-button');
-
-popCloseButtons.forEach(closeBtn => {
-    closeBtn.addEventListener('click', (event) => {
-        const popUpToClose = event.target.closest('.popup');
-        closeAndCleanPopup(popUpToClose);
-    });
-});
+popups.forEach((popup) => {
+    popup.addEventListener('mousedown', (evt) => {
+        if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__close-button')) {
+            closePopup(popup)
+        }
+    })
+})
 
 // Функционал диалогового окна профиля
 function handlFormSubmit(evt) {
@@ -122,13 +99,14 @@ function handlFormSubmit(evt) {
     profileTitle.textContent = profileNameInput.value;
     profileSubitle.textContent = profileJobInput.value;
     closePopup(profilePopup);
-    document.removeEventListener('keydown', closePopupOnPushEsc);
 }
 
 editProfileButton.addEventListener('click', () => {
     disabledButton(profilePopup);
 
     openPopup(profilePopup);
+
+    hideInputErrorsOnClosePopup(profilePopup);
 
     profileNameInput.value = profileTitle.textContent;
     profileJobInput.value = profileSubitle.textContent;
@@ -160,8 +138,6 @@ function createNewCard(newCardData) {
     cardImage.addEventListener('click', () => {
         openPopup(imagePopup);
 
-        document.addEventListener('keydown', closePopupOnPushEsc);
-
         imagePopupBackground.src = newCardData.link;
         imagePopupBackground.alt = newCardData.name;
         imagePopupTitle.textContent = newCardData.name;
@@ -189,12 +165,14 @@ function saveNewCard(event) {
 
     closePopup(newCardPopup);
     disabledButton(newCardPopup);
-    document.removeEventListener('keydown', closePopupOnPushEsc);
 }
 
 addNewCardButton.addEventListener('click', () => {
     openPopup(newCardPopup);
-    document.addEventListener('keydown', closePopupOnPushEsc);
+
+    hideInputErrorsOnClosePopup(newCardPopup);
+
+    disabledButton(newCardPopup);
 });
 
 newCardPopupContent.addEventListener('submit', saveNewCard);
