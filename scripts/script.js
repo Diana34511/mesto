@@ -179,4 +179,3 @@ newCardPopupContent.addEventListener('submit', saveNewCard);
 
 containerCards.append(...initialCards.map(card => createNewCard(card)));
 
-
