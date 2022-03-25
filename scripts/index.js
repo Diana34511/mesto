@@ -43,7 +43,7 @@ const validationClassNames = {
 
 // Элементы диалогового окна новой карточки
 const newCardPopup = document.querySelector('.new-card-popup');
-const newPlaceForm = newCardPopup.querySelector('.new-place_form')
+const newPlaceForm = newCardPopup.querySelector('.popup__form_new-place-form')
 const newCardPopupContent = newCardPopup.querySelector('.popup__content');
 const addNewCardButton = document.querySelector('.profile__add-card-button');
 const newPlaceName = newCardPopup.querySelector('input[name="placeName"]');
@@ -56,7 +56,7 @@ const imagePopupTitle = imagePopup.querySelector('.image-popup__title')
 
 // Элементы диалогового окна профиля
 const profilePopup = document.querySelector('.profile-popup');
-const profileForm = profilePopup.querySelector('.profile_form');
+const profileForm = profilePopup.querySelector('.popup__form_profile-form');
 const profilePopupContent = profilePopup.querySelector('.popup__content');
 const profileTitle = document.querySelector('.profile__title');
 const profileSubitle = document.querySelector('.profile__subtitle');
