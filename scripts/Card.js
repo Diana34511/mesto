@@ -1,4 +1,4 @@
-import { openPopup } from "./index.js"; 
+import { openPopup, closePopup, closePopupOnPushEsc } from "./index.js"; 
 
 class Card {
     constructor(data, cardSelector) {
