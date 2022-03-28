@@ -75,6 +75,7 @@ const containerCards = document.querySelector('.cards');
 
 // Common functions
 export function openPopup(popup) {
+    popup.classList.add('popup__transition');
     popup.classList.add('popup_opened');
     document.addEventListener('keydown', closePopupOnPushEsc);
 }
@@ -82,6 +83,10 @@ export function openPopup(popup) {
 export function closePopup(popupToClose){
     popupToClose.classList.remove('popup_opened');
     document.removeEventListener('keydown', closePopupOnPushEsc);
+
+    setTimeout(() => {
+        popupToClose.classList.remove('popup__transition');
+    }, 500); 
 }
 
 export const closePopupOnPushEsc = (evt) => {
@@ -160,8 +165,7 @@ function saveNewCard(event) {
 
     containerCards.prepend(newCardElement);
 
-    newPlaceName.value = "";
-    newPlaceLink.value = "";
+    document.getElementById('newCardForm').reset();
 
     closePopup(newCardPopup);
     disabledButton(newCardPopup);

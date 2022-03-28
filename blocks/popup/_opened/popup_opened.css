@@ -1,14 +1,5 @@
 .popup_opened {
-  display: block !important;
-  animation: fade_in_show 0.8s;
-}
-
-@keyframes fade_in_show {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
+  visibility: visible;
+  height: 100%;
+  opacity: 1;
 }

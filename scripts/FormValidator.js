@@ -12,7 +12,7 @@ class FormValidator {
     };
 
     hideInputErrorsOnClosePopup() {
-        const inputs = this._form.querySelectorAll('.popup__textarea');
+        const inputs = this._form.querySelectorAll(this._validationProps.inputSelector);
         inputs.forEach(inputElement => {
             this._hideInputError(inputElement);
             inputElement.value = "";
