@@ -1,0 +1,19 @@
+{
+  "name": "yandex.praktikum",
+  "version": "1.0.0",
+  "description": "\"Learning platform\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Diana34511/mesto.git"
+  },
+  "author": "Diana Kouxenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Diana34511/mesto/issues"
+  },
+  "homepage": "https://github.com/Diana34511/mesto#readme"
+}
