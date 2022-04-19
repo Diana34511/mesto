@@ -1,0 +1,15 @@
+@keyframes close {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.popup_closed {
+  animation: .7s ease 0s 1 normal forwards close;
+}

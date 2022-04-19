@@ -2,6 +2,7 @@
   "name": "yandex.praktikum",
   "version": "1.0.0",
   "description": "\"Learning platform\"",
+  "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack serve"

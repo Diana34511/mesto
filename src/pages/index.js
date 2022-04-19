@@ -12,7 +12,7 @@ import {
   profileForm,
   editProfileButton,
   validationClassNames,
-} from "../components/constants.js";
+} from "../utils/constants.js";
 
 const profileFormValidator = new FormValidator(
   validationClassNames,
@@ -26,20 +26,26 @@ const newPlaceFormValidator = new FormValidator(
 profileFormValidator.enableValidation();
 newPlaceFormValidator.enableValidation();
 
+const generateNewCardElement = ({ name, link }) => {
+  const cardPopupWithImage = new PopupWithImage(".image-popup");
+  cardPopupWithImage.setEventListeners();
+
+  const card = new Card({ name, link }, ".card-template", () => {
+    cardPopupWithImage.open({ name, link });
+  });
+
+  const cardElement = card.generateCard();
+
+  return cardElement;
+};
+
 //new creating card
 const cardsSection = new Section(
   {
     items: initialCards,
     renderer: ({ name, link }) => {
-      const cardPopupWithImage = new PopupWithImage(".image-popup");
-      cardPopupWithImage.setEventListeners();
-
-      const card = new Card({ name, link }, ".card-template", () => {
-        cardPopupWithImage.open({ name, link });
-      });
-
-      const cardElement = card.generateCard();
-      cardsSection.addItem(cardElement);
+      const newCardElement = generateNewCardElement({ name, link });
+      cardsSection.addItem(newCardElement);
     },
   },
   ".cards"
@@ -50,14 +56,7 @@ cardsSection.renderElements();
 const addCardPopup = new PopupWithForm(
   ".new-card-popup",
   ({ placeName: name, placeLink: link }) => {
-    const cardPopupWithImage = new PopupWithImage(".image-popup");
-    cardPopupWithImage.setEventListeners();
-
-    const newCard = new Card({ name, link }, ".card-template", () => {
-      cardPopupWithImage.open({ name, link });
-    });
-
-    const newCardElement = newCard.generateCard();
+    const newCardElement = generateNewCardElement({ name, link });
     cardsSection.addItem(newCardElement, true);
   }
 );
@@ -82,6 +81,7 @@ const profilePopup = new PopupWithForm(
 profilePopup.setEventListeners();
 
 addCardBtn.addEventListener("click", () => {
+  newPlaceFormValidator.hideInputErrorsOnOpenPopup();
   addCardPopup.open();
 });
 
@@ -89,5 +89,6 @@ editProfileButton.addEventListener("click", () => {
   const { name, job } = userInfo.getUserInfo();
   document.getElementById("job-input").value = job;
   document.getElementById("name-input").value = name;
+  profileFormValidator.hideInputErrorsOnOpenPopup();
   profilePopup.open();
 });

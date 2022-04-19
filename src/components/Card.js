@@ -57,19 +57,6 @@ class Card {
       .closest(".cards__item")
       .remove();
   }
-
-  _openImagePopup() {
-    const imagePopup = document.querySelector(".image-popup");
-    const imagePopupBackground = imagePopup.querySelector(
-      ".image-popup__image"
-    );
-    const imagePopupTitle = imagePopup.querySelector(".image-popup__title");
-    openPopup(imagePopup);
-
-    imagePopupBackground.src = this._link;
-    imagePopupBackground.alt = this._name;
-    imagePopupTitle.textContent = this._name;
-  }
 }
 
 export { Card };

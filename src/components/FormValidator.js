@@ -11,7 +11,7 @@ class FormValidator {
     errorElement.classList.add(this._validationProps.inputErrorActiveClass);
   }
 
-  hideInputErrorsOnClosePopup() {
+  hideInputErrorsOnOpenPopup() {
     const inputs = this._form.querySelectorAll(
       this._validationProps.inputSelector
     );
