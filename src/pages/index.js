@@ -26,10 +26,10 @@ const newPlaceFormValidator = new FormValidator(
 profileFormValidator.enableValidation();
 newPlaceFormValidator.enableValidation();
 
-const generateNewCardElement = ({ name, link }) => {
-  const cardPopupWithImage = new PopupWithImage(".image-popup");
-  cardPopupWithImage.setEventListeners();
+const cardPopupWithImage = new PopupWithImage(".image-popup");
+cardPopupWithImage.setEventListeners();
 
+const generateNewCardElement = ({ name, link }) => {
   const card = new Card({ name, link }, ".card-template", () => {
     cardPopupWithImage.open({ name, link });
   });
