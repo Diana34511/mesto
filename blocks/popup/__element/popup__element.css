@@ -1,8 +1,0 @@
-.popup__element {
-  padding: 0;
-  position: relative;
-}
-
-.popup__element:first-child {
-  margin-bottom: 33px;
-}
