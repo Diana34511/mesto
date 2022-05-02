@@ -6,13 +6,20 @@ export default class UserInfo {
 
   getUserInfo() {
     return {
-      name: this._nameElement.textContent,
-      job: this._jobElement.textContent,
+      id: this._id,
+      name: this._name,
+      job: this._job,
     };
   }
 
-  setUserInfo({ name, job }) {
-    this._nameElement.textContent = name;
-    this._jobElement.textContent = job;
+  setUserInfo({ name, about, _id, cohort, avatar }) {
+    this._job = about;
+    this._avatar = avatar;
+    this._cohort = cohort;
+    this._name = name;
+    this._id = _id;
+
+    this._nameElement.textContent = this._name;
+    this._jobElement.textContent = this._job;
   }
 }

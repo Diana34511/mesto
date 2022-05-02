@@ -37,16 +37,6 @@ const api = new Api({
 const cardPopupWithImage = new PopupWithImage(".image-popup");
 cardPopupWithImage.setEventListeners();
 
-const generateNewCardElement = ({ name, link, likes }) => {
-  const card = new Card({ name, link, likes }, ".card-template", () => {
-    cardPopupWithImage.open({ name, link });
-  });
-
-  const cardElement = card.generateCard();
-
-  return cardElement;
-};
-
 const userInfo = new UserInfo({
   nameSelector: ".profile__title",
   jobSelector: ".profile__subtitle",
@@ -56,7 +46,6 @@ const profilePopup = new PopupWithForm(
   ".profile-popup",
   ({ nameInput: name, jobInput: job }) => {
     return api.updateUserInfo({ name, job }).then((res) => {
-      console.log(res);
       userInfo.setUserInfo({
         name: res.name,
         job: res.about,
@@ -64,6 +53,27 @@ const profilePopup = new PopupWithForm(
     });
   }
 );
+
+const generateNewCardElement = (data) => {
+  const card = new Card(
+    data,
+    ".card-template",
+    () => {
+      cardPopupWithImage.open({ name: data.name, link: data.link });
+    },
+    (id) => {
+      return api.addLike(id);
+    },
+    (id) => {
+      return api.deleteLike(id);
+    }
+  );
+
+  const userId = userInfo.getUserInfo().id;
+  const cardElement = card.generateCard(userId);
+
+  return cardElement;
+};
 
 profilePopup.setEventListeners();
 
@@ -77,50 +87,58 @@ editProfileButton.addEventListener("click", () => {
 
 const allCards = api.getAllCards();
 
-allCards
-  .then((fetchedCards) => {
-    const cardsSection = new Section(
-      {
-        items: fetchedCards,
-        renderer: ({ name, link, likes }) => {
-          const newCardElement = generateNewCardElement({ name, link, likes });
-          cardsSection.addItem(newCardElement);
+const fetchAllCards = () => {
+  return allCards
+    .then((fetchedCards) => {
+      const cardsSection = new Section(
+        {
+          items: fetchedCards,
+          renderer: (data) => {
+            const newCardElement = generateNewCardElement(data);
+            cardsSection.addItem(newCardElement);
+          },
         },
-      },
-      ".cards"
-    );
+        ".cards"
+      );
 
-    cardsSection.renderElements();
+      cardsSection.renderElements();
 
-    const addCardPopup = new PopupWithForm(
-      ".new-card-popup",
-      ({ placeName: name, placeLink: link }) => {
-        return api.createNewCard({ name, link, likes }).then((res) => {
-          const newCardElement = generateNewCardElement({
-            name: res.name,
-            link: res.link,
-            likes: res.likes,
+      const addCardPopup = new PopupWithForm(
+        ".new-card-popup",
+        ({ placeName: name, placeLink: link }) => {
+          return api.createNewCard({ name, link, likes }).then((res) => {
+            const newCardElement = generateNewCardElement(res);
+            cardsSection.addItem(newCardElement, true);
           });
-          cardsSection.addItem(newCardElement, true);
-        });
-      }
-    );
+        }
+      );
 
-    addCardPopup.setEventListeners();
+      addCardPopup.setEventListeners();
 
-    addCardBtn.addEventListener("click", () => {
-      newPlaceFormValidator.hideInputErrorsOnOpenPopup();
-      addCardPopup.open();
+      addCardBtn.addEventListener("click", () => {
+        newPlaceFormValidator.hideInputErrorsOnOpenPopup();
+        addCardPopup.open();
+      });
+    })
+    .catch((err) => {
+      console.error(err);
     });
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+};
 
-api
-  .getUserInfo()
-  .then(({ name, about }) => {
-    userInfo.setUserInfo({ name, job: about });
+const fetchUserInfo = () => {
+  return api
+    .getUserInfo()
+    .then((res) => {
+      userInfo.setUserInfo(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+fetchUserInfo()
+  .then(() => {
+    return fetchAllCards();
   })
   .catch((err) => {
     console.error(err);
