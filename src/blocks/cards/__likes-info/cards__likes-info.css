@@ -1,0 +1,8 @@
+.cards__likes-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 38px;
+  align-items: center;
+  gap: 3px;
+}

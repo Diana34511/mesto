@@ -5,8 +5,8 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import Section from "../components/Section.js";
 import UserInfo from "../components/UserInfo.js";
+import Api from "../components/Api";
 import {
-  initialCards,
   addCardBtn,
   addNewCardForm,
   profileForm,
@@ -26,11 +26,19 @@ const newPlaceFormValidator = new FormValidator(
 profileFormValidator.enableValidation();
 newPlaceFormValidator.enableValidation();
 
+const api = new Api({
+  url: "https://nomoreparties.co/v1/cohort-40/",
+  headers: {
+    authorization: "4262d86a-0c05-431c-aa2a-8625ad9b488b",
+    "Content-Type": "application/json",
+  },
+});
+
 const cardPopupWithImage = new PopupWithImage(".image-popup");
 cardPopupWithImage.setEventListeners();
 
-const generateNewCardElement = ({ name, link }) => {
-  const card = new Card({ name, link }, ".card-template", () => {
+const generateNewCardElement = ({ name, link, likes }) => {
+  const card = new Card({ name, link, likes }, ".card-template", () => {
     cardPopupWithImage.open({ name, link });
   });
 
@@ -38,30 +46,6 @@ const generateNewCardElement = ({ name, link }) => {
 
   return cardElement;
 };
-
-//new creating card
-const cardsSection = new Section(
-  {
-    items: initialCards,
-    renderer: ({ name, link }) => {
-      const newCardElement = generateNewCardElement({ name, link });
-      cardsSection.addItem(newCardElement);
-    },
-  },
-  ".cards"
-);
-
-cardsSection.renderElements();
-
-const addCardPopup = new PopupWithForm(
-  ".new-card-popup",
-  ({ placeName: name, placeLink: link }) => {
-    const newCardElement = generateNewCardElement({ name, link });
-    cardsSection.addItem(newCardElement, true);
-  }
-);
-
-addCardPopup.setEventListeners();
 
 const userInfo = new UserInfo({
   nameSelector: ".profile__title",
@@ -71,19 +55,17 @@ const userInfo = new UserInfo({
 const profilePopup = new PopupWithForm(
   ".profile-popup",
   ({ nameInput: name, jobInput: job }) => {
-    userInfo.setUserInfo({
-      name,
-      job,
+    return api.updateUserInfo({ name, job }).then((res) => {
+      console.log(res);
+      userInfo.setUserInfo({
+        name: res.name,
+        job: res.about,
+      });
     });
   }
 );
 
 profilePopup.setEventListeners();
-
-addCardBtn.addEventListener("click", () => {
-  newPlaceFormValidator.hideInputErrorsOnOpenPopup();
-  addCardPopup.open();
-});
 
 editProfileButton.addEventListener("click", () => {
   const { name, job } = userInfo.getUserInfo();
@@ -92,3 +74,54 @@ editProfileButton.addEventListener("click", () => {
   profileFormValidator.hideInputErrorsOnOpenPopup();
   profilePopup.open();
 });
+
+const allCards = api.getAllCards();
+
+allCards
+  .then((fetchedCards) => {
+    const cardsSection = new Section(
+      {
+        items: fetchedCards,
+        renderer: ({ name, link, likes }) => {
+          const newCardElement = generateNewCardElement({ name, link, likes });
+          cardsSection.addItem(newCardElement);
+        },
+      },
+      ".cards"
+    );
+
+    cardsSection.renderElements();
+
+    const addCardPopup = new PopupWithForm(
+      ".new-card-popup",
+      ({ placeName: name, placeLink: link }) => {
+        return api.createNewCard({ name, link, likes }).then((res) => {
+          const newCardElement = generateNewCardElement({
+            name: res.name,
+            link: res.link,
+            likes: res.likes,
+          });
+          cardsSection.addItem(newCardElement, true);
+        });
+      }
+    );
+
+    addCardPopup.setEventListeners();
+
+    addCardBtn.addEventListener("click", () => {
+      newPlaceFormValidator.hideInputErrorsOnOpenPopup();
+      addCardPopup.open();
+    });
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
+api
+  .getUserInfo()
+  .then(({ name, about }) => {
+    userInfo.setUserInfo({ name, job: about });
+  })
+  .catch((err) => {
+    console.error(err);
+  });
