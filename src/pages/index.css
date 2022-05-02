@@ -37,7 +37,11 @@
 @import url(../blocks/popup/__textarea-error/popup__textarea-error.css);
 @import url(../blocks/popup/__textarea-error/_active/popup__textarea-error_active.css);
 @import url(../blocks/popup/__textarea/_type/popup__textarea_type_error.css);
-@import url(../blocks/popup/__transition/popup__transition.css);
+
+@import url(../blocks/popup/__alert/popup__alert.css);
+@import url(../blocks/popup/__alert-button/popup__alert-button.css);
+@import url(../blocks/popup/__alert-title/popup__alert-title.css);
+
 @import url(../blocks/cards/__like_active/cards__like_active.css);
 @import url(../blocks/cards/__trash-button/cards__trash-button.css);
 @import url(../blocks/image-popup/image-popup.css);

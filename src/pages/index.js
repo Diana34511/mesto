@@ -6,6 +6,7 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import Section from "../components/Section.js";
 import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api";
+import PopupWithSubmit from "../components/PopupWithSubmit";
 import {
   addCardBtn,
   addNewCardForm,
@@ -37,6 +38,9 @@ const api = new Api({
 const cardPopupWithImage = new PopupWithImage(".image-popup");
 cardPopupWithImage.setEventListeners();
 
+const submitPopup = new PopupWithSubmit(".alert-popup");
+submitPopup.setEventListeners();
+
 const userInfo = new UserInfo({
   nameSelector: ".profile__title",
   jobSelector: ".profile__subtitle",
@@ -46,18 +50,18 @@ const profilePopup = new PopupWithForm(
   ".profile-popup",
   ({ nameInput: name, jobInput: job }) => {
     return api.updateUserInfo({ name, job }).then((res) => {
-      userInfo.setUserInfo({
-        name: res.name,
-        job: res.about,
-      });
+      userInfo.setUserInfo(res);
     });
   }
 );
 
 const generateNewCardElement = (data) => {
+  const userId = userInfo.getUserInfo().id;
+
   const card = new Card(
     data,
     ".card-template",
+    userId,
     () => {
       cardPopupWithImage.open({ name: data.name, link: data.link });
     },
@@ -66,11 +70,17 @@ const generateNewCardElement = (data) => {
     },
     (id) => {
       return api.deleteLike(id);
+    },
+    (id) => {
+      return api.deleteCard(id);
+    },
+    (submitHandler) => {
+      submitPopup.setSubmitHandler(submitHandler);
+      submitPopup.open();
     }
   );
 
-  const userId = userInfo.getUserInfo().id;
-  const cardElement = card.generateCard(userId);
+  const cardElement = card.generateCard();
 
   return cardElement;
 };
@@ -106,7 +116,7 @@ const fetchAllCards = () => {
       const addCardPopup = new PopupWithForm(
         ".new-card-popup",
         ({ placeName: name, placeLink: link }) => {
-          return api.createNewCard({ name, link, likes }).then((res) => {
+          return api.createNewCard({ name, link }).then((res) => {
             const newCardElement = generateNewCardElement(res);
             cardsSection.addItem(newCardElement, true);
           });

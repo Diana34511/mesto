@@ -1,5 +1,15 @@
 class Card {
-  constructor(data, cardSelector, handleCardClick, addLike, deleteLike) {
+  constructor(
+    data,
+    cardSelector,
+    userId,
+    handleCardClick,
+    addLike,
+    deleteLike,
+    deleteCard,
+    openConfirmationPopup
+  ) {
+    this._openConfirmationPopup = openConfirmationPopup;
     this._id = data._id;
     this._name = data.name;
     this._link = data.link;
@@ -9,6 +19,8 @@ class Card {
     this._handleCardClick = handleCardClick;
     this._addLike = addLike;
     this._deleteLike = deleteLike;
+    this._deleteCard = deleteCard;
+    this._userId = userId;
   }
 
   _getTemplate() {
@@ -20,7 +32,7 @@ class Card {
     return cardElement;
   }
 
-  generateCard(userId) {
+  generateCard() {
     this._element = this._getTemplate();
     this._setEventListeners();
 
@@ -30,7 +42,7 @@ class Card {
     this._element.querySelector(".cards__likes").textContent =
       this._likes.length;
 
-    const hasUserLike = !!this._likes.find((like) => like._id === userId);
+    const hasUserLike = !!this._likes.find((like) => like._id === this._userId);
     if (hasUserLike) {
       this._toggleCardLike();
     }
@@ -45,11 +57,17 @@ class Card {
         this._handleLikeClick();
       });
 
-    this._element
-      .querySelector(".cards__trash-button")
-      .addEventListener("click", () => {
-        this._handleRemoveCard();
-      });
+    if (this._userId === this._owner._id) {
+      this._element
+        .querySelector(".cards__trash-button")
+        .addEventListener("click", () => {
+          this._openConfirmationPopup(() => {
+            return this._handleRemoveCard();
+          });
+        });
+    } else {
+      this._element.querySelector(".cards__trash-button").remove();
+    }
 
     this._element
       .querySelector(".cards__image")
@@ -86,10 +104,16 @@ class Card {
   }
 
   _handleRemoveCard() {
-    this._element
-      .querySelector(".cards__trash-button")
-      .closest(".cards__item")
-      .remove();
+    return this._deleteCard(this._id)
+      .then((res) => {
+        this._element
+          .querySelector(".cards__trash-button")
+          .closest(".cards__item")
+          .remove();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 

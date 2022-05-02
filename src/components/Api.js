@@ -61,7 +61,6 @@ export default class Api {
       method: "PUT",
       headers: this._headers,
     }).then((res) => {
-      console.log(res);
       return this._checkResult(res);
     });
   }
@@ -71,7 +70,15 @@ export default class Api {
       method: "DELETE",
       headers: this._headers,
     }).then((res) => {
-      console.log(res);
+      return this._checkResult(res);
+    });
+  }
+
+  deleteCard(id) {
+    return fetch(`${this._url}cards/${id}`, {
+      method: "DELETE",
+      headers: this._headers,
+    }).then((res) => {
       return this._checkResult(res);
     });
   }

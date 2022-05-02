@@ -82,7 +82,9 @@
               <span class="job-input-error popup__textarea-error"></span>
             </li>
             <li class="popup__element">
-              <button class="popup__button hover-animation">Сохранить</button>
+              <button class="popup__button hover-animation" type="submit">
+                Сохранить
+              </button>
             </li>
           </ul>
         </form>
@@ -126,7 +128,9 @@
               <span class="place-link-input-error popup__textarea-error"></span>
             </li>
             <li class="popup__element">
-              <button class="popup__button hover-animation">Создать</button>
+              <button class="popup__button hover-animation" type="submit">
+                Создать
+              </button>
             </li>
           </ul>
         </form>
@@ -139,6 +143,19 @@
         <img class="image-popup__image" alt="" src="/" />
         <h2 class="image-popup__title"></h2>
       </div>
+    </div>
+    <div class="popup alert-popup">
+      <form class="popup__content popup__alert">
+        <button class="popup__close-button"></button>
+        <h2 class="popup__title popup__alert-title">Вы уверены?</h2>
+
+        <button
+          class="popup__button popup__alert-button hover-animation"
+          type="submit"
+        >
+           Да
+        </button>
+      </form>
     </div>
   </body>
 </html>
