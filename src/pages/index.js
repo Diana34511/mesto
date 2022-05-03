@@ -13,6 +13,7 @@ import {
   profileForm,
   editProfileButton,
   validationClassNames,
+  changeProfileAvatarForm,
 } from "../utils/constants.js";
 
 const profileFormValidator = new FormValidator(
@@ -24,8 +25,14 @@ const newPlaceFormValidator = new FormValidator(
   addNewCardForm
 );
 
+const avatarFormValidator = new FormValidator(
+  validationClassNames,
+  changeProfileAvatarForm
+);
+
 profileFormValidator.enableValidation();
 newPlaceFormValidator.enableValidation();
+avatarFormValidator.enableValidation();
 
 const api = new Api({
   url: "https://nomoreparties.co/v1/cohort-40/",
@@ -44,6 +51,7 @@ submitPopup.setEventListeners();
 const userInfo = new UserInfo({
   nameSelector: ".profile__title",
   jobSelector: ".profile__subtitle",
+  avatarImageSelector: ".profile__avatar-image",
 });
 
 const profilePopup = new PopupWithForm(
@@ -54,6 +62,22 @@ const profilePopup = new PopupWithForm(
     });
   }
 );
+
+const avatarPopup = new PopupWithForm(".avatar-popup", ({ avatar }) => {
+  return api
+    .updateAvatar(avatar)
+    .then((res) => {
+      userInfo.updateAvatar(res.avatar);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+avatarPopup.setEventListeners();
+
+document.querySelector(".profile__avatar").addEventListener("click", () => {
+  avatarPopup.open();
+});
 
 const generateNewCardElement = (data) => {
   const userId = userInfo.getUserInfo().id;

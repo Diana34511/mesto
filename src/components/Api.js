@@ -82,4 +82,16 @@ export default class Api {
       return this._checkResult(res);
     });
   }
+
+  updateAvatar(link) {
+    return fetch(`${this._url}users/me/avatar`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: link,
+      }),
+    }).then((res) => {
+      return this._checkResult(res);
+    });
+  }
 }

@@ -12,11 +12,9 @@
     </header>
     <main>
       <section class="profile">
-        <img
-          src="<%=require('./images/Avatar.svg')%>"
-          class="profile__avatar"
-          alt="Аватарка"
-        />
+        <div class="profile__avatar hover-animation">
+          <img class="profile__avatar-image" alt="Аватарка" />
+        </div>
         <div class="profile__info">
           <h1 class="profile__title"></h1>
           <p class="profile__subtitle"></p>
@@ -156,6 +154,40 @@
            Да
         </button>
       </form>
+    </div>
+
+    <div class="popup avatar-popup">
+      <div class="popup__content popup__content-avatar">
+        <button class="popup__close-button"></button>
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form
+          class="popup__form popup__form_avatar"
+          name="reset"
+          id="newAvatar"
+          novalidate
+        >
+          <ul class="popup__elements">
+            <li class="popup__element popup__avatar-link">
+              <input
+                name="avatar"
+                id="avatar-input"
+                value=""
+                type="url"
+                class="popup__textarea"
+                placeholder="Введите ссылку на аватар"
+                required
+              />
+              <span class="avatar-input-error popup__textarea-error"></span>
+            </li>
+
+            <li class="popup__element">
+              <button class="popup__button hover-animation" type="submit">
+                Сохранить
+              </button>
+            </li>
+          </ul>
+        </form>
+      </div>
     </div>
   </body>
 </html>
