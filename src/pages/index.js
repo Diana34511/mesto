@@ -67,7 +67,7 @@ const avatarPopup = new PopupWithForm(".avatar-popup", ({ avatar }) => {
   return api
     .updateAvatar(avatar)
     .then((res) => {
-      userInfo.updateAvatar(res.avatar);
+      userInfo.updateProfileAvatar(res.avatar);
     })
     .catch((err) => {
       console.error(err);

@@ -25,7 +25,7 @@ export default class UserInfo {
     this._avatarImage.src = this._avatar;
   }
 
-  updateAvatar(avatar) {
+  updateProfileAvatar(avatar) {
     this._avatar = avatar;
     this._avatarImage.src = this._avatar;
   }
