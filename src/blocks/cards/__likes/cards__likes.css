@@ -1,5 +1,5 @@
 .cards__likes{
-  color: black;
+ 
   margin: 0;
   padding: 0;
   font-weight: 400;
@@ -7,5 +7,5 @@
   line-height: 16px;
   text-align: center;
   
-  color: #000000
+  color: #000000;
 }
