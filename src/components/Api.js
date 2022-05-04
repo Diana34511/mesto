@@ -11,87 +11,68 @@ export default class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getAllCards() {
-    return fetch(`${this._url}cards`, {
-      method: "GET",
-      headers: this._headers,
-    }).then((res) => {
+  _fetch(url, params) {
+    return fetch(url, { headers: this._headers, ...params }).then((res) => {
       return this._checkResult(res);
+    });
+  }
+
+  getAllCards() {
+    return this._fetch(`${this._url}cards`, {
+      method: "GET",
     });
   }
 
   getUserInfo() {
-    return fetch(`${this._url}users/me`, {
+    return this._fetch(`${this._url}users/me`, {
       method: "GET",
-      headers: this._headers,
-    }).then((res) => {
-      console.log(res);
-      return this._checkResult(res);
     });
   }
 
   updateUserInfo({ name, job }) {
-    return fetch(`${this._url}users/me`, {
+    return this._fetch(`${this._url}users/me`, {
       method: "PATCH",
-      headers: this._headers,
       body: JSON.stringify({
         name,
         about: job,
       }),
-    }).then((res) => {
-      return this._checkResult(res);
     });
   }
 
   createNewCard({ name, link }) {
-    return fetch(`${this._url}cards`, {
+    return this._fetch(`${this._url}cards`, {
       method: "POST",
-      headers: this._headers,
       body: JSON.stringify({
         name,
         link,
       }),
-    }).then((res) => {
-      return this._checkResult(res);
     });
   }
 
   addLike(id) {
-    return fetch(`${this._url}cards/${id}/likes`, {
+    return this._fetch(`${this._url}cards/${id}/likes`, {
       method: "PUT",
-      headers: this._headers,
-    }).then((res) => {
-      return this._checkResult(res);
     });
   }
 
   deleteLike(id) {
-    return fetch(`${this._url}cards/${id}/likes`, {
+    return this._fetch(`${this._url}cards/${id}/likes`, {
       method: "DELETE",
-      headers: this._headers,
-    }).then((res) => {
-      return this._checkResult(res);
     });
   }
 
   deleteCard(id) {
-    return fetch(`${this._url}cards/${id}`, {
+    return this._fetch(`${this._url}cards/${id}`, {
       method: "DELETE",
-      headers: this._headers,
-    }).then((res) => {
-      return this._checkResult(res);
     });
   }
 
   updateAvatar(link) {
-    return fetch(`${this._url}users/me/avatar`, {
+    return this._fetch(`${this._url}users/me/avatar`, {
       method: "PATCH",
-      headers: this._headers,
       body: JSON.stringify({
         avatar: link,
       }),
-    }).then((res) => {
-      return this._checkResult(res);
     });
   }
 }

@@ -4,6 +4,8 @@ export default class PopupWithForm extends Popup {
   constructor(popupSelector, submitForm) {
     super(popupSelector);
     this._submitForm = submitForm;
+    this._buttonElement = this._popupSelector.querySelector(".popup__button");
+    console.log(this._buttonElement.name);
   }
 
   _getInputValues() {
@@ -16,17 +18,14 @@ export default class PopupWithForm extends Popup {
     return data;
   }
 
-  setEventListeners() {
-    super.setEventListeners();
-
-    this._popupSelector.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const formValues = this._getInputValues();
-      this._submitForm(formValues).then(() => {
-        this._disabledButton();
-        this.close();
-      });
-    });
+  _renderLoading(isLoading) {
+    if (isLoading) {
+      this._buttonElement.textContent = "Сохранение...";
+    } else if (this._buttonElement.name === "newPlace") {
+      this._buttonElement.textContent = "Создать";
+    } else {
+      this._buttonElement.textContent = "Сохранить";
+    }
   }
 
   close() {
@@ -35,9 +34,29 @@ export default class PopupWithForm extends Popup {
     this._popupSelector.querySelector(".popup__form").reset();
   }
 
+  setEventListeners() {
+    super.setEventListeners();
+
+    this._popupSelector.addEventListener("submit", (event) => {
+      event.preventDefault();
+      this._renderLoading(true);
+      const formValues = this._getInputValues();
+      this._submitForm(formValues)
+        .then((res) => {
+          this._disabledButton();
+          this.close();
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          this._renderLoading(false);
+        });
+    });
+  }
+
   _disabledButton() {
-    const buttonElement = this._popupSelector.querySelector(".popup__button");
-    buttonElement.classList.add("popup__button_inactive");
-    buttonElement.setAttribute("disabled", true);
+    this._buttonElement.classList.add("popup__button_inactive");
+    this._buttonElement.setAttribute("disabled", true);
   }
 }

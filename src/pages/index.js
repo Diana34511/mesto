@@ -64,14 +64,9 @@ const profilePopup = new PopupWithForm(
 );
 
 const avatarPopup = new PopupWithForm(".avatar-popup", ({ avatar }) => {
-  return api
-    .updateAvatar(avatar)
-    .then((res) => {
-      userInfo.updateProfileAvatar(res.avatar);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  return api.updateAvatar(avatar).then((res) => {
+    userInfo.updateProfileAvatar(res.avatar);
+  });
 });
 avatarPopup.setEventListeners();
 
@@ -119,10 +114,9 @@ editProfileButton.addEventListener("click", () => {
   profilePopup.open();
 });
 
-const allCards = api.getAllCards();
-
 const fetchAllCards = () => {
-  return allCards
+  return api
+    .getAllCards()
     .then((fetchedCards) => {
       const cardsSection = new Section(
         {
