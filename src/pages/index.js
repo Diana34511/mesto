@@ -65,7 +65,7 @@ const profilePopup = new PopupWithForm(
 
 const avatarPopup = new PopupWithForm(".avatar-popup", ({ avatar }) => {
   return api.updateAvatar(avatar).then((res) => {
-    userInfo.updateProfileAvatar(res.avatar);
+    userInfo.setUserInfo(res);
   });
 });
 avatarPopup.setEventListeners();
@@ -108,9 +108,10 @@ profilePopup.setEventListeners();
 
 editProfileButton.addEventListener("click", () => {
   const { name, job } = userInfo.getUserInfo();
+
+  profileFormValidator.hideInputErrors();
   document.getElementById("job-input").value = job;
   document.getElementById("name-input").value = name;
-  profileFormValidator.hideInputErrorsOnOpenPopup();
   profilePopup.open();
 });
 
@@ -144,7 +145,7 @@ const fetchAllCards = () => {
       addCardPopup.setEventListeners();
 
       addCardBtn.addEventListener("click", () => {
-        newPlaceFormValidator.hideInputErrorsOnOpenPopup();
+        newPlaceFormValidator.hideInputErrors();
         addCardPopup.open();
       });
     })

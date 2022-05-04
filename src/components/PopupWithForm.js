@@ -4,13 +4,14 @@ export default class PopupWithForm extends Popup {
   constructor(popupSelector, submitForm) {
     super(popupSelector);
     this._submitForm = submitForm;
-    this._buttonElement = this._popupSelector.querySelector(".popup__button");
+    this._buttonElement = this._popup.querySelector(".popup__button");
+    this._inputs = this._popup.querySelectorAll(".popup__textarea");
+    this._form = this._popup.querySelector(".popup__form");
   }
 
   _getInputValues() {
-    const inputs = this._popupSelector.querySelectorAll(".popup__textarea");
     const data = {};
-    inputs.forEach((element) => {
+    this._inputs.forEach((element) => {
       data[element.name] = element.value;
     });
 
@@ -20,36 +21,28 @@ export default class PopupWithForm extends Popup {
   _renderLoading(isLoading) {
     if (isLoading) {
       this._buttonElement.textContent = "Сохранение...";
-    } else if (this._buttonElement.name === "newPlace") {
-      this._buttonElement.textContent = "Создать";
-    } else {
-      this._buttonElement.textContent = "Сохранить";
     }
   }
 
   close() {
     super.close();
 
-    this._popupSelector.querySelector(".popup__form").reset();
+    this._form.reset();
   }
 
   setEventListeners() {
     super.setEventListeners();
 
-    this._popupSelector.addEventListener("submit", (event) => {
+    this._form.addEventListener("submit", (event) => {
       event.preventDefault();
+
+      const initialText = this._buttonElement.textContent;
       this._renderLoading(true);
-      const formValues = this._getInputValues();
-      this._submitForm(formValues)
-        .then((res) => {
-          this._disabledButton();
-          this.close();
-        })
-        .catch((err) => {
-          console.error(err);
-        })
+      this._buttonElement.textContent = "Сохранение...";
+      this._submitForm(this._getInputValues())
+        .then((res) => this.close())
         .finally(() => {
-          this._renderLoading(false);
+          this._buttonElement.textContent = initialText;
         });
     });
   }

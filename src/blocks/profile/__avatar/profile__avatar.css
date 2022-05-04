@@ -15,6 +15,7 @@
   top: 0;
   left: 0;
   background: url(../../../images/Vector.svg),rgba(0, 0, 0, 0.8);
+  z-index: 2;
   background-size: 26px;
   background-position: center;
   background-repeat: no-repeat;

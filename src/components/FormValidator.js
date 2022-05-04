@@ -2,6 +2,12 @@ class FormValidator {
   constructor(data, formToValid) {
     this._validationProps = data;
     this._form = formToValid;
+    this._inputs = this._form.querySelectorAll(
+      this._validationProps.inputSelector
+    );
+    this._buttonElement = this._form.querySelector(
+      this._validationProps.submitButtonSelector
+    );
   }
 
   _showInputError(inputElement) {
@@ -11,11 +17,8 @@ class FormValidator {
     errorElement.classList.add(this._validationProps.inputErrorActiveClass);
   }
 
-  hideInputErrorsOnOpenPopup() {
-    const inputs = this._form.querySelectorAll(
-      this._validationProps.inputSelector
-    );
-    inputs.forEach((inputElement) => {
+  hideInputErrors() {
+    this._inputs.forEach((inputElement) => {
       this._hideInputError(inputElement);
       inputElement.value = "";
     });
@@ -37,20 +40,15 @@ class FormValidator {
   }
 
   _setEventListeners() {
-    const inputList = Array.from(
-      this._form.querySelectorAll(this._validationProps.inputSelector)
-    );
-    const buttonElement = this._form.querySelector(
-      this._validationProps.submitButtonSelector
-    );
-    this._toggleButtonState(inputList, buttonElement, this._validationProps);
+    const inputList = Array.from(this._inputs);
+    this._toggleButtonState(inputList, this._buttonElement);
 
     inputList.forEach((inputElement) => {
       const eventsList = ["change", "paste", "input"];
       eventsList.forEach((eventName) => {
         inputElement.addEventListener(eventName, () => {
           this._checkInputValidity(inputElement);
-          this._toggleButtonState(inputList, buttonElement);
+          this._toggleButtonState(inputList, this._buttonElement);
         });
       });
     });
