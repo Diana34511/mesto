@@ -75,7 +75,6 @@ class Card {
   }
 
   _handleLikeClick() {
-    // const likeEl = this._element.querySelector(".cards__like");
     const isActive = this._likesButton.classList.contains("cards__like_active");
     if (isActive) {
       this._deleteLike(this._id)

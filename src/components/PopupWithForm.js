@@ -40,15 +40,10 @@ export default class PopupWithForm extends Popup {
       this._renderLoading(true);
       this._buttonElement.textContent = "Сохранение...";
       this._submitForm(this._getInputValues())
-        .then((res) => this.close())
+        .then(() => this.close())
         .finally(() => {
           this._buttonElement.textContent = initialText;
         });
     });
-  }
-
-  _disabledButton() {
-    this._buttonElement.classList.add("popup__button_inactive");
-    this._buttonElement.setAttribute("disabled", true);
   }
 }

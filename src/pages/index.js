@@ -9,30 +9,26 @@ import Api from "../components/Api";
 import PopupWithSubmit from "../components/PopupWithSubmit";
 import {
   addCardBtn,
-  addNewCardForm,
-  profileForm,
   editProfileButton,
-  validationClassNames,
-  changeProfileAvatarForm,
+  valifationConfig,
+  nameInput,
+  jobInput,
 } from "../utils/constants.js";
 
-const profileFormValidator = new FormValidator(
-  validationClassNames,
-  profileForm
-);
-const newPlaceFormValidator = new FormValidator(
-  validationClassNames,
-  addNewCardForm
-);
+const formValidators = {};
 
-const avatarFormValidator = new FormValidator(
-  validationClassNames,
-  changeProfileAvatarForm
-);
+const enableFormsValidation = ({ formSelector, validationClassNames }) => {
+  const formList = Array.from(document.querySelectorAll(formSelector));
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(validationClassNames, formElement);
+    const formName = formElement.getAttribute("name");
 
-profileFormValidator.enableValidation();
-newPlaceFormValidator.enableValidation();
-avatarFormValidator.enableValidation();
+    formValidators[formName] = validator;
+    validator.enableValidation();
+  });
+};
+
+enableFormsValidation(valifationConfig);
 
 const api = new Api({
   url: "https://nomoreparties.co/v1/cohort-40/",
@@ -71,6 +67,7 @@ const avatarPopup = new PopupWithForm(".avatar-popup", ({ avatar }) => {
 avatarPopup.setEventListeners();
 
 document.querySelector(".profile__avatar").addEventListener("click", () => {
+  formValidators["avatar"].resetValidation();
   avatarPopup.open();
 });
 
@@ -109,65 +106,48 @@ profilePopup.setEventListeners();
 editProfileButton.addEventListener("click", () => {
   const { name, job } = userInfo.getUserInfo();
 
-  profileFormValidator.hideInputErrors();
-  document.getElementById("job-input").value = job;
-  document.getElementById("name-input").value = name;
+  formValidators["profile"].resetValidation();
+  jobInput.value = job;
+  nameInput.value = name;
   profilePopup.open();
 });
 
-const fetchAllCards = () => {
-  return api
-    .getAllCards()
-    .then((fetchedCards) => {
-      const cardsSection = new Section(
-        {
-          items: fetchedCards,
-          renderer: (data) => {
-            const newCardElement = generateNewCardElement(data);
-            cardsSection.addItem(newCardElement);
-          },
-        },
-        ".cards"
-      );
+const showAllCards = (cards) => {
+  const cardsSection = new Section(
+    {
+      items: cards,
+      renderer: (data) => {
+        const newCardElement = generateNewCardElement(data);
+        cardsSection.addItem(newCardElement);
+      },
+    },
+    ".cards"
+  );
 
-      cardsSection.renderElements();
+  cardsSection.renderElements();
 
-      const addCardPopup = new PopupWithForm(
-        ".new-card-popup",
-        ({ placeName: name, placeLink: link }) => {
-          return api.createNewCard({ name, link }).then((res) => {
-            const newCardElement = generateNewCardElement(res);
-            cardsSection.addItem(newCardElement, true);
-          });
-        }
-      );
-
-      addCardPopup.setEventListeners();
-
-      addCardBtn.addEventListener("click", () => {
-        newPlaceFormValidator.hideInputErrors();
-        addCardPopup.open();
+  const addCardPopup = new PopupWithForm(
+    ".new-card-popup",
+    ({ placeName: name, placeLink: link }) => {
+      return api.createNewCard({ name, link }).then((res) => {
+        const newCardElement = generateNewCardElement(res);
+        cardsSection.addItem(newCardElement, true);
       });
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+    }
+  );
+
+  addCardPopup.setEventListeners();
+
+  addCardBtn.addEventListener("click", () => {
+    formValidators["new-place"].resetValidation();
+    addCardPopup.open();
+  });
 };
 
-const fetchUserInfo = () => {
-  return api
-    .getUserInfo()
-    .then((res) => {
-      userInfo.setUserInfo(res);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-};
-
-fetchUserInfo()
-  .then(() => {
-    return fetchAllCards();
+Promise.all([api.getUserInfo(), api.getAllCards()])
+  .then(([userData, cardsData]) => {
+    userInfo.setUserInfo(userData);
+    showAllCards(cardsData);
   })
   .catch((err) => {
     console.error(err);
